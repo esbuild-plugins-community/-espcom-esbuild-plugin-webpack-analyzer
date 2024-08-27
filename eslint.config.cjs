@@ -1,11 +1,6 @@
-/**
- * @docs: https://eslint.org/docs/user-guide/configuring/language-options
- *
- */
-
 const path = require('path');
 
-const { getEslintConfig } = require('dk-eslint-config');
+const { getEslintConfig } = require('@espcom/eslint-config');
 
 const eslintConfig = getEslintConfig({
   tsConfigPath: path.resolve(__dirname, './tsconfig.json'),

@@ -10,11 +10,13 @@
   },
   "scripts": {
     "prepare": "husky",
-    "build": "rm -rf ./dist&&tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json&&echo '{\"type\": \"module\"}' > dist/esm/package.json",
     "prepublishOnly": "pnpm run build",
-    "analyze:js": "eslint --ignore-path ./.formatignore --ext \".js,.ts\" ./",
-    "format:js": "eslint --ignore-path ./.formatignore --ext \".js,.ts\" --fix",
-    "check-types": "tsc --noEmit"
+    "analyze:js": "eslint ./src",
+    "format:js": "eslint --fix",
+    "check-types": "tsc --noEmit",
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json"
   },
   "dependencies": {
     "webpack-bundle-analyzer": "4.9.1"
@@ -22,7 +24,7 @@
   "devDependencies": {
     "@types/node": "20.3.1",
     "esbuild": "0.23.1",
-    "dk-eslint-config": "3.4.5",
+    "@espcom/eslint-config": "0.0.4",
     "lint-staged": "15.2.9",
     "typescript": "5.5.4",
     "husky": "9.1.5"
