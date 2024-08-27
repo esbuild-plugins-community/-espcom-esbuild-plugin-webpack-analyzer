@@ -17,4 +17,4 @@ coverage
 src
 .mocharc.json
 tsconfig.json
-tsconfig-compile.json
+tsconfig.*.json
