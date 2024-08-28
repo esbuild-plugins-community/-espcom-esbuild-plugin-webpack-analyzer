@@ -1,45 +1,52 @@
-import { Plugin } from 'esbuild';
+import * as path from 'node:path';
+
 import { start } from 'webpack-bundle-analyzer';
+import { Plugin } from 'esbuild';
 
+import { TypeOptions, TypeStats } from './types';
+import { pluginName } from './constants.js';
 import { getModules } from './getModules.js';
+import { validateResult } from './validators/validateResult.js';
+import { validateOptions } from './validators/validateOptions.js';
 
-type TypeOptions = {
-  host?: string;
-  port?: number;
-  open?: boolean;
-};
+export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
+  validateOptions(options);
 
-export const pluginWebpackAnalyzer = (options: TypeOptions): Plugin => ({
-  name: '@espcom/esbuild-plugin-webpack-analyzer',
-  setup(build) {
-    const { port = 8888, host = '127.0.0.1', open = false } = options;
+  return {
+    name: pluginName,
+    setup(build) {
+      let updateChartData: ((params: TypeStats) => void) | undefined;
 
-    let updateChartData: ((params: any) => void) | undefined;
+      build.onEnd((resultRaw) => {
+        const result = validateResult(resultRaw);
 
-    build.onEnd((result) => {
-      const metaFile = result.metafile!;
-      const stats = {
-        assets: Object.keys(metaFile.outputs).map((chunkName) => ({
-          name: chunkName,
-          chunks: [chunkName.split('/').pop()?.split('.').shift()!],
-        })),
-        modules: getModules(metaFile),
-      };
+        const stats: TypeStats = {
+          assets: Object.keys(result.metafile.outputs).map((chunkName) => ({
+            name: chunkName,
+            chunks: [chunkName.split(path.sep).pop()?.split('.').shift()!],
+          })),
+          modules: getModules(result.metafile),
+        };
 
-      if (updateChartData) {
-        updateChartData(stats);
-        return Promise.resolve();
-      }
+        if (updateChartData) {
+          updateChartData(stats);
 
-      // https://github.com/webpack-contrib/webpack-bundle-analyzer
-      return start(stats, {
-        analyzerUrl: (params) => `http://${params.listenHost}:${params.boundAddress.port}`,
-        port,
-        host,
-        openBrowser: open || false,
-      }).then((res) => {
-        updateChartData = res.updateChartData;
+          return Promise.resolve();
+        }
+
+        // https://github.com/webpack-contrib/webpack-bundle-analyzer
+        return start(stats, {
+          analyzerUrl: (params) => `http://${params.listenHost}:${params.boundAddress.port}`,
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          port: options?.port ?? 8888,
+          host: options?.host ?? '127.0.0.1',
+          openBrowser: options?.open || false,
+        }).then((res) => {
+          updateChartData = res.updateChartData;
+
+          options?.getAnalyzerServer?.(res);
+        });
       });
-    });
-  },
-});
+    },
+  };
+};
