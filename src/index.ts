@@ -1,1 +1,1 @@
-export { pluginWebpackAnalyzer } from './pluginWebpackAnalyzer';
+export { pluginWebpackAnalyzer } from './pluginWebpackAnalyzer.js';

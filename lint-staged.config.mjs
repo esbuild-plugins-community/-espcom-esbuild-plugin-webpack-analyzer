@@ -6,8 +6,7 @@
  *
  */
 
-const config = {
-  '(*.js|*.ts|*.tsx)': ['pnpm run format:js'],
+export default {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  '(*.js|*.ts|*.cjs|*.mjs)': ['pnpm run format:js'],
 };
-
-module.exports = config;

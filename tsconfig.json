@@ -1,6 +1,9 @@
 {
   "include": [
-    "src"
+    "src",
+    "test",
+    "eslint.config.mjs",
+    "lint-staged.config.mjs"
   ],
   "compilerOptions": {
     "outDir": "dist",

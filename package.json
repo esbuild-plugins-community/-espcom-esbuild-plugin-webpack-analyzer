@@ -2,32 +2,45 @@
   "name": "@espcom/esbuild-plugin-webpack-analyzer",
   "author": "espcom",
   "license": "MIT",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Webpack Bundle Analyzer integration for esbuild",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer.git"
   },
   "scripts": {
     "prepare": "husky",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "pnpm run test",
     "analyze:js": "eslint ./src",
     "format:js": "eslint --fix",
     "check-types": "tsc --noEmit",
     "prebuild": "rm -rf ./dist",
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
-    "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json"
+    "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "pretest": "pnpm run build&&node --test ./test/import*.*js",
+    "test": "nyc mocha&&pnpm run gen-badge",
+    "gen-badge": "istanbul-cobertura-badger -e 85 -g 70 -r ./.nyc_output/cobertura-coverage.xml -d . -b cover"
   },
   "dependencies": {
     "webpack-bundle-analyzer": "4.9.1"
   },
   "devDependencies": {
     "@types/node": "20.3.1",
+    "@types/sinon": "17.0.3",
+    "@types/chai": "4.3.19",
+    "@types/mocha": "10.0.7",
+    "chai": "4.5.0",
+    "tsx": "4.19.0",
+    "sinon": "18.0.0",
+    "mocha": "10.7.3",
     "esbuild": "0.23.1",
-    "@espcom/eslint-config": "0.0.5",
+    "@espcom/eslint-config": "0.0.6",
     "lint-staged": "15.2.9",
     "typescript": "5.5.4",
-    "husky": "9.1.5"
+    "husky": "9.1.5",
+    "nyc": "15.1.0",
+    "istanbul-cobertura-badger": "1.3.1"
   },
   "peerDependencies": {
     "esbuild": "^0.23.1"

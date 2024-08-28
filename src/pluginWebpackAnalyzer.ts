@@ -1,7 +1,7 @@
 import { Plugin } from 'esbuild';
 import { start } from 'webpack-bundle-analyzer';
 
-import { getModules } from './getModules';
+import { getModules } from './getModules.js';
 
 type TypeOptions = {
   host?: string;

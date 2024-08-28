@@ -3,12 +3,11 @@
 node_modules
 yarn.lock
 pnpm-lock.yaml
-.eslintrc.js
-.stylelintrc.js
+eslint.config.*
 .formatignore
 .editorconfig
 .gitignore
-/lint-staged.config.js
+lint-staged.config.*
 /test
 
 .nyc_output
@@ -18,3 +17,6 @@ src
 .mocharc.json
 tsconfig.json
 tsconfig.*.json
+cover.svg
+.husky
+.nycrc.json
