@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import { start } from 'webpack-bundle-analyzer';
 import { Plugin } from 'esbuild';
 
-import { TypeOptions, TypeStats } from './types';
+import { TypeOptions, TypeStats, TypeStartResponse } from './types';
 import { pluginName } from './constants.js';
 import { getModules } from './getModules.js';
 import { validateResult } from './validators/validateResult.js';
@@ -15,7 +15,7 @@ export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
   return {
     name: pluginName,
     setup(build) {
-      let updateChartData: ((params: TypeStats) => void) | undefined;
+      let response: TypeStartResponse | undefined;
 
       build.onEnd((resultRaw) => {
         const result = validateResult(resultRaw);
@@ -28,8 +28,8 @@ export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
           modules: getModules(result.metafile),
         };
 
-        if (updateChartData) {
-          updateChartData(stats);
+        if (response?.updateChartData) {
+          response.updateChartData(stats);
 
           return Promise.resolve();
         }
@@ -42,10 +42,14 @@ export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
           host: options?.host ?? '127.0.0.1',
           openBrowser: options?.open || false,
         }).then((res) => {
-          updateChartData = res.updateChartData;
+          response = res;
 
-          options?.getAnalyzerServer?.(res);
+          options?.getStartResponse?.(res);
         });
+      });
+
+      build.onDispose(() => {
+        response?.http?.close();
       });
     },
   };

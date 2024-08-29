@@ -1,14 +1,16 @@
 import { Server } from 'node:http';
 
+export type TypeStartResponse = {
+  updateChartData: (params: TypeStats) => void;
+  http: Server;
+  ws: any;
+};
+
 export type TypeOptions = {
   host?: string;
   port?: number;
   open?: boolean;
-  getAnalyzerServer?: (params: {
-    updateChartData: (params: TypeStats) => void;
-    http: Server;
-    ws: any;
-  }) => void;
+  getStartResponse?: (params: TypeStartResponse) => void;
 };
 
 export type TypeModule = {

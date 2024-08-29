@@ -1,7 +1,5 @@
 declare module 'webpack-bundle-analyzer' {
-  import { Server } from 'node:http';
-
-  import { TypeStats } from './types';
+  import { TypeStats, TypeStartResponse } from './types';
 
   export const start: (
     stats: TypeStats,
@@ -11,5 +9,5 @@ declare module 'webpack-bundle-analyzer' {
       host: string;
       openBrowser: boolean;
     }
-  ) => Promise<{ updateChartData: (params: TypeStats) => void; http: Server; ws: any }>;
+  ) => Promise<TypeStartResponse>;
 }

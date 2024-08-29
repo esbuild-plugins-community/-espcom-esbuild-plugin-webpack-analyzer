@@ -28,9 +28,9 @@ export function validateOptions(options?: TypeOptions) {
       }
     }
 
-    if (typeof options.getAnalyzerServer !== 'undefined') {
-      if (typeof options.getAnalyzerServer !== 'function') {
-        throw new Error(`${pluginName}: The "getAnalyzerServer" parameter must be a function`);
+    if (typeof options.getStartResponse !== 'undefined') {
+      if (typeof options.getStartResponse !== 'function') {
+        throw new Error(`${pluginName}: The "getStartResponse" parameter must be a function`);
       }
     }
   }

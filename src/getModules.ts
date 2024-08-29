@@ -16,11 +16,12 @@ export const getModules = ({ inputs, outputs }: Metafile): Array<TypeModule> => 
     const name = `./${moduleName
       .replace(/(.*)?\/node_modules\//, '/node_modules/')
       .replace(/^((\.)*\/)+/, '')}`;
+
     return {
       id: name,
       name,
-      chunks: [...(chunksIndexed[moduleName] || [])],
       size: obj.bytes,
+      chunks: [...(chunksIndexed[moduleName] || [])],
     };
   });
 };

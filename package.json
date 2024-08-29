@@ -18,33 +18,27 @@
     "prebuild": "rm -rf ./dist",
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
-    "pretest": "pnpm run build&&node --test ./test/import*.*js",
-    "test": "nyc mocha&&pnpm run gen-badge",
-    "test-watch": "mocha --watch",
+    "pretest": "pnpm run build",
+    "test": "c8 node --import tsx --test ./test/*.test.*",
+    "test-watch": "pnpm run build&&node --import tsx --test --watch ./test/*.test.*",
     "gen-badge": "istanbul-cobertura-badger -e 85 -g 70 -r ./.nyc_output/cobertura-coverage.xml -d . -b cover"
   },
   "dependencies": {
     "webpack-bundle-analyzer": "4.9.1"
   },
   "devDependencies": {
-    "@types/node": "20.3.1",
-    "@types/sinon": "17.0.3",
-    "@types/chai": "4.3.19",
-    "@types/mocha": "10.0.7",
-    "chai": "4.5.0",
+    "@types/node": "22.5.1",
+    "@espcom/eslint-config": "0.0.7",
     "tsx": "4.19.0",
-    "sinon": "18.0.0",
-    "mocha": "10.7.3",
+    "c8": "10.1.2",
     "esbuild": "0.23.1",
-    "@espcom/eslint-config": "0.0.6",
     "lint-staged": "15.2.9",
     "typescript": "5.5.4",
     "husky": "9.1.5",
-    "nyc": "15.1.0",
     "istanbul-cobertura-badger": "1.3.1"
   },
   "peerDependencies": {
-    "esbuild": "^0.23.1"
+    "esbuild": "^0.23.0"
   },
   "engines": {
     "node": ">=18.0.0"

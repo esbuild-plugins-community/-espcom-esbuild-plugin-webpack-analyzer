@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, it } from 'node:test';
+import * as assert from 'node:assert/strict';
 
 import { pluginWebpackAnalyzer } from '../src';
 
@@ -8,63 +9,65 @@ const nonNumbers = ['', true, null, [], () => false, {}];
 const nonBooleans = ['', null, [], () => false, {}, 0];
 const nonFunctions = ['', null, [], {}, 0, false];
 
-describe('Validate options', () => {
-  it('options should be an object or undefined', () => {
-    expect(() => pluginWebpackAnalyzer()).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({})).to.not.throw();
+void describe('Validate options', async () => {
+  await it('options should be an object or undefined', () => {
+    assert.doesNotThrow(() => pluginWebpackAnalyzer());
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({}));
 
     nonObjects.forEach((value: any) => {
-      expect(() => pluginWebpackAnalyzer(value)).to.throw(
-        '@espcom/esbuild-plugin-webpack-analyzer: Options must be a plain object'
-      );
+      assert.throws(() => pluginWebpackAnalyzer(value), {
+        message: '@espcom/esbuild-plugin-webpack-analyzer: Options must be a plain object',
+      });
     });
   });
 
-  it('options.host should be a full string or undefined', () => {
-    expect(() => pluginWebpackAnalyzer({ host: undefined })).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({ host: '1' })).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({ host: '' })).to.throw(
-      '@espcom/esbuild-plugin-webpack-analyzer: The "host" parameter must be a non-empty string'
-    );
+  await it('options.host should be a full string or undefined', () => {
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ host: undefined }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ host: '1' }));
+    assert.throws(() => pluginWebpackAnalyzer({ host: '' }), {
+      message:
+        '@espcom/esbuild-plugin-webpack-analyzer: The "host" parameter must be a non-empty string',
+    });
 
     nonStrings.forEach((value: any) => {
-      expect(() => pluginWebpackAnalyzer({ host: value })).to.throw(
-        '@espcom/esbuild-plugin-webpack-analyzer: The "host" parameter must be a string'
-      );
+      assert.throws(() => pluginWebpackAnalyzer({ host: value }), {
+        message: '@espcom/esbuild-plugin-webpack-analyzer: The "host" parameter must be a string',
+      });
     });
   });
 
-  it('options.port should be a number or undefined', () => {
-    expect(() => pluginWebpackAnalyzer({ port: undefined })).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({ port: 0 })).to.not.throw();
+  await it('options.port should be a number or undefined', () => {
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ port: undefined }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ port: 0 }));
 
     nonNumbers.forEach((value: any) => {
-      expect(() => pluginWebpackAnalyzer({ port: value })).to.throw(
-        '@espcom/esbuild-plugin-webpack-analyzer: The "port" parameter must be a number'
-      );
+      assert.throws(() => pluginWebpackAnalyzer({ port: value }), {
+        message: '@espcom/esbuild-plugin-webpack-analyzer: The "port" parameter must be a number',
+      });
     });
   });
 
-  it('options.open should be a boolean or undefined', () => {
-    expect(() => pluginWebpackAnalyzer({ open: undefined })).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({ open: true })).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({ open: false })).to.not.throw();
+  await it('options.open should be a boolean or undefined', () => {
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ open: undefined }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ open: true }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ open: false }));
 
     nonBooleans.forEach((value: any) => {
-      expect(() => pluginWebpackAnalyzer({ open: value })).to.throw(
-        '@espcom/esbuild-plugin-webpack-analyzer: The "open" parameter must be a boolean'
-      );
+      assert.throws(() => pluginWebpackAnalyzer({ open: value }), {
+        message: '@espcom/esbuild-plugin-webpack-analyzer: The "open" parameter must be a boolean',
+      });
     });
   });
 
-  it('options.getAnalyzerServer should be a function or undefined', () => {
-    expect(() => pluginWebpackAnalyzer({ getAnalyzerServer: undefined })).to.not.throw();
-    expect(() => pluginWebpackAnalyzer({ getAnalyzerServer: () => undefined })).to.not.throw();
+  await it('options.getAnalyzerServer should be a function or undefined', () => {
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ getStartResponse: undefined }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ getStartResponse: () => undefined }));
 
     nonFunctions.forEach((value: any) => {
-      expect(() => pluginWebpackAnalyzer({ getAnalyzerServer: value })).to.throw(
-        '@espcom/esbuild-plugin-webpack-analyzer: The "getAnalyzerServer" parameter must be a function'
-      );
+      assert.throws(() => pluginWebpackAnalyzer({ getStartResponse: value }), {
+        message:
+          '@espcom/esbuild-plugin-webpack-analyzer: The "getStartResponse" parameter must be a function',
+      });
     });
   });
 });
