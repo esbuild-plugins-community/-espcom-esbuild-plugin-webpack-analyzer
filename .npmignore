@@ -17,6 +17,8 @@ src
 .mocharc.json
 tsconfig.json
 tsconfig.*.json
-cover.svg
 .husky
 .nycrc.json
+/assets
+genCoverageBadge.ts
+genSizeBadges.ts
