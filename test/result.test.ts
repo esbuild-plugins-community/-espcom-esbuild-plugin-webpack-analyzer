@@ -4,9 +4,9 @@ import { describe, it, mock } from 'node:test';
 
 import { build, BuildOptions, context } from 'esbuild';
 
-import { pluginWebpackAnalyzer } from '../src';
-import { validateResult } from '../src/validators/validateResult';
-import { TypeStartResponse } from '../src/types';
+import { pluginWebpackAnalyzer } from '../src/index.js';
+import { validateResult } from '../src/validators/validateResult.js';
+import { TypeStartResponse } from '../src/types.js';
 
 const nonObjects = [0, true, null, '', [], () => false];
 

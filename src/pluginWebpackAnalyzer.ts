@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import { start } from 'webpack-bundle-analyzer';
 import { Plugin } from 'esbuild';
 
-import { TypeOptions, TypeStats, TypeStartResponse } from './types';
+import { TypeOptions, TypeStats, TypeStartResponse } from './types.js';
 import { pluginName } from './constants.js';
 import { getModules } from './getModules.js';
 import { validateResult } from './validators/validateResult.js';

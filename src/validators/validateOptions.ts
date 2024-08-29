@@ -1,4 +1,4 @@
-import { TypeOptions } from '../types';
+import { TypeOptions } from '../types.js';
 import { pluginName } from '../constants.js';
 
 export function validateOptions(options?: TypeOptions) {
