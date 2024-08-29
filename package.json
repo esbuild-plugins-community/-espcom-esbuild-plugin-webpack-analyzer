@@ -11,7 +11,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "prepublishOnly": "pnpm run test",
+    "prepublishOnly": "pnpm run analyze:js&&pnpm run check-types&&pnpm run test",
     "analyze:js": "eslint ./src",
     "format:js": "eslint --fix",
     "check-types": "tsc --noEmit",
@@ -19,7 +19,7 @@
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "pretest": "pnpm run build",
-    "test": "c8 node --import tsx --test ./test/*.test.*",
+    "test": "node --test ./test/import*.test.*js&&c8 node --import tsx --test ./test/*.test.*",
     "test-watch": "pnpm run build&&node --import tsx --test --watch ./test/*.test.*",
     "gen-badge": "istanbul-cobertura-badger -e 85 -g 70 -r ./.nyc_output/cobertura-coverage.xml -d . -b cover"
   },
