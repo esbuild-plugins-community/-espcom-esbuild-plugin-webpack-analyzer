@@ -1,6 +1,6 @@
 import { Metafile } from 'esbuild';
 
-import { TypeModule } from './types';
+import { TypeModule } from './types.js';
 
 export const getModules = ({ inputs, outputs }: Metafile): Array<TypeModule> => {
   const chunksIndexed: Record<string, Set<string>> = {};

@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert/strict';
 
-import { pluginWebpackAnalyzer } from '../src';
+import { pluginWebpackAnalyzer } from '../src/index.js';
 
 const nonObjects = [0, true, null, '', [], () => false];
 const nonStrings = [0, true, null, [], () => false, {}];
