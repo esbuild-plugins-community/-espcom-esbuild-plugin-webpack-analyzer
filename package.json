@@ -17,12 +17,13 @@
     "check-types": "tsc --noEmit",
     "prebuild": "rm -rf ./dist",
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
-    "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json&&pnpm run gen-size",
+    "postbuild": "echo '{\"type\": \"module\"}' > dist/esm/package.json&&echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json&&pnpm run gen-size-badge",
     "pretest": "pnpm run build",
     "test": "node --test ./test/import*.*js&&c8 node --import tsx --test ./test/*.test.*",
+    "posttest": "pnpm run gen-coverage-badge",
     "test-watch": "pnpm run build&&node --import tsx --test --watch ./test/*.test.*",
-    "gen-badge": "node --import tsx genCoverageBadge.ts",
-    "gen-size": "node --import tsx genSizeBadges.ts"
+    "gen-coverage-badge": "node --import tsx ./scripts/genCoverageBadge.ts",
+    "gen-size-badge": "node --import tsx ./scripts/genSizeBadges.ts"
   },
   "dependencies": {
     "webpack-bundle-analyzer": "4.9.1"

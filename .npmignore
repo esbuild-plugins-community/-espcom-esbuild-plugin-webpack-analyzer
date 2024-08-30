@@ -20,5 +20,4 @@ tsconfig.*.json
 .husky
 .nycrc.json
 /assets
-genCoverageBadge.ts
-genSizeBadges.ts
+/scripts
