@@ -67,7 +67,6 @@ const buildConfig: BuildOptions = {
   packages: 'external',
 };
 
-// @ts-ignore
 await Promise.all([
   esbuild
     .build({
