@@ -2,8 +2,7 @@
   "include": [
     "src",
     "test",
-    "genSizeBadges.ts",
-    "genCoverageBadge.ts",
+    "scripts",
     "eslint.config.mjs",
     "lint-staged.config.mjs"
   ],
