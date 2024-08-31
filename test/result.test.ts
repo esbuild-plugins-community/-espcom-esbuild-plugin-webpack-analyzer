@@ -133,9 +133,7 @@ void describe('Validate result', async () => {
       },
     };
 
-    const modules = getModules(sampleMetafile);
-
-    assert.deepEqual(modules, [
+    assert.deepEqual(getModules(sampleMetafile), [
       {
         id: './test/res/entry.ts',
         name: './test/res/entry.ts',
