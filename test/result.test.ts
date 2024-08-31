@@ -2,11 +2,12 @@ import * as path from 'node:path';
 import * as assert from 'node:assert/strict';
 import { describe, it, mock } from 'node:test';
 
-import { build, BuildOptions, context } from 'esbuild';
+import { build, BuildOptions, context, Metafile } from 'esbuild';
 
 import { pluginWebpackAnalyzer } from '../src/index.js';
 import { validateResult } from '../src/validators/validateResult.js';
 import { TypeStartResponse } from '../src/types.js';
+import { getModules } from '../src/getModules.js';
 
 const nonObjects = [0, true, null, '', [], () => false];
 
@@ -108,7 +109,7 @@ void describe('Validate result', async () => {
   });
 
   await it('getModules works correctly', async () => {
-    const sampleMetafile = {
+    const sampleMetafile: Metafile = {
       inputs: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         'test/res/entry.ts': {
@@ -132,7 +133,15 @@ void describe('Validate result', async () => {
       },
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    assert.equal(sampleMetafile.inputs['test/res/entry.ts'].bytes, 110);
+    const modules = getModules(sampleMetafile);
+
+    assert.deepEqual(modules, [
+      {
+        id: './test/res/entry.ts',
+        name: './test/res/entry.ts',
+        size: 110,
+        chunks: ['entry'],
+      },
+    ]);
   });
 });
