@@ -1,3 +1,5 @@
+import * as path from 'node:path';
+
 import { Metafile } from 'esbuild';
 
 import { TypeModule } from './types.js';
@@ -5,22 +7,20 @@ import { TypeModule } from './types.js';
 export const getModules = ({ inputs, outputs }: Metafile): Array<TypeModule> => {
   const chunksIndexed: Record<string, Set<string>> = {};
 
-  Object.entries(outputs).forEach(([chunkName, chunk]) => {
-    Object.keys(chunk.inputs).forEach((moduleName) => {
+  Object.entries(outputs).forEach(([chunkName, chunkData]) => {
+    Object.keys(chunkData.inputs).forEach((moduleName) => {
       chunksIndexed[moduleName] = chunksIndexed[moduleName] || new Set();
-      chunksIndexed[moduleName].add(chunkName.split('/').pop()?.split('.').shift() || 'unknown');
+      chunksIndexed[moduleName].add(path.parse(chunkName).name.split('.').shift()!);
     });
   });
 
-  return Object.entries(inputs).map(([moduleName, obj]) => {
-    const name = `./${moduleName
-      .replace(/(.*)?\/node_modules\//, '/node_modules/')
-      .replace(/^((\.)*\/)+/, '')}`;
+  return Object.entries(inputs).map(([moduleName, moduleData]) => {
+    const name = `./${moduleName.replace(/(.*)?node_modules/, 'node_modules')}`;
 
     return {
       id: name,
       name,
-      size: obj.bytes,
+      size: moduleData.bytes,
       chunks: [...(chunksIndexed[moduleName] || [])],
     };
   });

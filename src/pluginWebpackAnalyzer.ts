@@ -8,6 +8,7 @@ import { pluginName } from './constants.js';
 import { getModules } from './getModules.js';
 import { validateResult } from './validators/validateResult.js';
 import { validateOptions } from './validators/validateOptions.js';
+import { validateSetup } from './validators/validateSetup.js';
 
 export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
   validateOptions(options);
@@ -17,13 +18,15 @@ export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
     setup(build) {
       let response: TypeStartResponse | undefined;
 
+      validateSetup(build);
+
       build.onEnd((resultRaw) => {
         const result = validateResult(resultRaw);
 
         const stats: TypeStats = {
           assets: Object.keys(result.metafile.outputs).map((chunkName) => ({
             name: chunkName,
-            chunks: [chunkName.split(path.sep).pop()?.split('.').shift()!],
+            chunks: [path.parse(chunkName).name.split('.').shift()!],
           })),
           modules: getModules(result.metafile),
         };
