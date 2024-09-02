@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/compare/v1.0.0...v1.0.1) (2024-09-02)
+
+
+### Bug Fixes
+
+* update package version on release ([5693828](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/commit/5693828a4ade36a3ac1df6fdd50b97c35981b2f4))
+* windows package output fixed ([ccef22c](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/commit/ccef22cc2b728e44bd13577666275077940b978b))
+
 ## 1.0.0 (2024-08-31)
 
 
