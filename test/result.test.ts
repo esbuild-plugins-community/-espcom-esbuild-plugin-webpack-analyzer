@@ -8,8 +8,10 @@ import { pluginWebpackAnalyzer } from '../src/index.js';
 import { validateResult } from '../src/validators/validateResult.js';
 import { TypeStartResponse } from '../src/types.js';
 import { getModules } from '../src/getModules.js';
+import { validateSetup } from '../src/validators/validateSetup.js';
 
 const nonObjects = [0, true, null, '', [], () => false];
+const nonTrue = [0, false, null, '', [], () => false, {}];
 
 void describe('Validate result', async () => {
   const config: BuildOptions = {
@@ -26,6 +28,17 @@ void describe('Validate result', async () => {
     plugins: [],
   };
 
+  await it('validateSetup throws an error', () => {
+    assert.doesNotThrow(() => validateSetup({ initialOptions: { metafile: true } } as any));
+
+    nonTrue.forEach((value: any) => {
+      assert.throws(() => validateSetup({ initialOptions: { metafile: value } } as any), {
+        message:
+          '@espcom/esbuild-plugin-webpack-analyzer: "metafile" parameter must be set to "true" is esbuild config',
+      });
+    });
+  });
+
   await it('validateResult throws an error', () => {
     assert.doesNotThrow(() => validateResult({ metafile: {} } as any));
 
@@ -37,17 +50,17 @@ void describe('Validate result', async () => {
     });
   });
 
-  await it('metafile option should be enabled', () => {
-    return build({ ...config, metafile: false })
-      .then(() => undefined)
-      .catch((error) => {
-        assert.match(
-          error.message,
-          new RegExp(
-            '@espcom/esbuild-plugin-webpack-analyzer: "metafile" parameter must be set to "true" is esbuild config'
-          )
-        );
-      });
+  await it('metafile option should be enabled', async () => {
+    try {
+      await build({ ...config, metafile: false });
+    } catch (error: any) {
+      assert.match(
+        error.message,
+        new RegExp(
+          '@espcom/esbuild-plugin-webpack-analyzer: "metafile" parameter must be set to "true" is esbuild config'
+        )
+      );
+    }
   });
 
   await it('analyzer should start', async () => {
@@ -119,10 +132,27 @@ void describe('Validate result', async () => {
           ],
           format: 'esm',
         },
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        'node_modules123/123/node_modules/test/res/entry.ts': {
+          bytes: 110,
+          imports: [
+            { path: 'istanbul-cobertura-badger', kind: 'import-statement', external: true },
+          ],
+          format: 'esm',
+        },
       },
       outputs: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         'entry.js': {
+          imports: [{ path: 'istanbul-cobertura-badger', kind: 'require-call', external: true }],
+          exports: [],
+          entryPoint: 'test/res/entry.ts',
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          inputs: { 'test/res/entry.ts': { bytesInOutput: 83 } },
+          bytes: 1719,
+        },
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        'entry2.js': {
           imports: [{ path: 'istanbul-cobertura-badger', kind: 'require-call', external: true }],
           exports: [],
           entryPoint: 'test/res/entry.ts',
@@ -138,7 +168,13 @@ void describe('Validate result', async () => {
         id: './test/res/entry.ts',
         name: './test/res/entry.ts',
         size: 110,
-        chunks: ['entry'],
+        chunks: ['entry', 'entry2'],
+      },
+      {
+        id: './node_modules/test/res/entry.ts',
+        name: './node_modules/test/res/entry.ts',
+        size: 110,
+        chunks: [],
       },
     ]);
   });
