@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/compare/v1.0.1...v1.0.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* exclude changelog from npm package ([918d49b](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/commit/918d49bc09b1a48fe50b3303629ab91a94ec5a81))
+
 ## [1.0.1](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/compare/v1.0.0...v1.0.1) (2024-09-02)
 
 
