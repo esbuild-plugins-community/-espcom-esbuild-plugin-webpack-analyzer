@@ -41,8 +41,9 @@ function afterBuild(result: BuildResult, type: 'esm' | 'cjs') {
 
     // eslint-disable-next-line no-console
     console.log(`(changed) Size ${type} changed from ${prevSize} to ${size}`);
-
-    return;
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(`(new) Size ${type} ${size}`);
   }
 
   const svg = makeBadge({
@@ -50,9 +51,6 @@ function afterBuild(result: BuildResult, type: 'esm' | 'cjs') {
     message: size,
     color: 'blue',
   });
-
-  // eslint-disable-next-line no-console
-  console.log(`(new) Size ${type} ${size}`);
 
   fs.writeFileSync(path.resolve(svgPath), svg, 'utf-8');
 }
