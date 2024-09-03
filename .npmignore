@@ -21,3 +21,4 @@ tsconfig.*.json
 .nycrc.json
 /assets
 /scripts
+CHANGELOG.md
