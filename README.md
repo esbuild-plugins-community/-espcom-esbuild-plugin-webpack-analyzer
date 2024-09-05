@@ -26,7 +26,8 @@ npm install @espcom/esbuild-plugin-webpack-analyzer --save-dev
 
 ## Usage
 
-To use the plugin, add it to the plugins array in your esbuild configuration:
+To use the plugin, add it to the plugins array in your esbuild configuration. Be sure to place it 
+**last**; otherwise, if another plugin modifies the output files, they will not be analyzed:
 
 ```javascript
 import esbuild from 'esbuild';
@@ -37,7 +38,11 @@ esbuild.build({
   bundle: true,
   outfile: 'dist/out.js',
   metafile: true,  // Ensure metafile is set to true
-  plugins: [pluginWebpackAnalyzer({ open: true })], // Configure the plugin as needed
+  plugins: [
+    // other plugins
+  
+    pluginWebpackAnalyzer({ open: true }) // Configure the plugin as needed
+  ],
 });
 ```
 
