@@ -28,6 +28,22 @@ export function validateOptions(options?: TypeOptions) {
       }
     }
 
+    if (typeof options.extensions !== 'undefined') {
+      if (!Array.isArray(options.extensions)) {
+        throw new Error(`${pluginName}: The "extensions" parameter must be an array`);
+      }
+
+      if (options.extensions.some((ext) => typeof ext !== 'string')) {
+        throw new Error(`${pluginName}: The "extensions" parameter must be an array of strings`);
+      }
+
+      if (options.extensions.some((ext) => !ext.startsWith('.'))) {
+        throw new Error(
+          `${pluginName}: Each extension in "extensions" parameter must start from a dot`
+        );
+      }
+    }
+
     if (typeof options.getStartResponse !== 'undefined') {
       if (typeof options.getStartResponse !== 'function') {
         throw new Error(`${pluginName}: The "getStartResponse" parameter must be a function`);

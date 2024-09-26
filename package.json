@@ -30,7 +30,7 @@
     "gen-size-badge": "node --import tsx ./scripts/genSizeBadges.ts"
   },
   "dependencies": {
-    "webpack-bundle-analyzer": "4.9.1"
+    "webpack-bundle-analyzer": "4.10.2"
   },
   "devDependencies": {
     "@types/node": "22.5.1",

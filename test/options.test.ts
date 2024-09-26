@@ -4,6 +4,7 @@ import * as assert from 'node:assert/strict';
 import { pluginWebpackAnalyzer } from '../src/index.js';
 
 const nonObjects = [0, true, null, '', [], () => false];
+const nonArrays = [0, true, null, '', {}, () => false];
 const nonStrings = [0, true, null, [], () => false, {}];
 const nonNumbers = ['', true, null, [], () => false, {}];
 const nonBooleans = ['', null, [], () => false, {}, 0];
@@ -56,6 +57,39 @@ void describe('Validate options', async () => {
       assert.throws(() => pluginWebpackAnalyzer({ open: value }), {
         message: '@espcom/esbuild-plugin-webpack-analyzer: The "open" parameter must be a boolean',
       });
+    });
+  });
+
+  await it('options.extensions should be an array with strings started with a dot', () => {
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ extensions: undefined }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ extensions: [] }));
+    assert.doesNotThrow(() => pluginWebpackAnalyzer({ extensions: ['.js', '.css'] }));
+
+    assert.throws(() => pluginWebpackAnalyzer({ extensions: ['js'] }), {
+      message:
+        '@espcom/esbuild-plugin-webpack-analyzer: Each extension in "extensions" parameter must start from a dot',
+    });
+
+    nonArrays.forEach((value: any) => {
+      assert.throws(
+        () => pluginWebpackAnalyzer({ extensions: value }),
+        {
+          message:
+            '@espcom/esbuild-plugin-webpack-analyzer: The "extensions" parameter must be an array',
+        },
+        `${value} should throw`
+      );
+    });
+
+    nonStrings.forEach((value: any) => {
+      assert.throws(
+        () => pluginWebpackAnalyzer({ extensions: [value] }),
+        {
+          message:
+            '@espcom/esbuild-plugin-webpack-analyzer: The "extensions" parameter must be an array of strings',
+        },
+        `${value} should throw`
+      );
     });
   });
 
