@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/compare/v1.0.2...v1.1.0) (2024-09-26)
+
+
+### Features
+
+* add extensions to options ([c1143b0](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/commit/c1143b00c1b1513b274460e08d1f95ac52d312f2))
+
 ## [1.0.2](https://github.com/esbuild-plugins-community/esbuild-plugin-webpack-analyzer/compare/v1.0.1...v1.0.2) (2024-09-03)
 
 
