@@ -11,6 +11,7 @@ export type TypeOptions = {
   port?: number;
   open?: boolean;
   getStartResponse?: (params: TypeStartResponse) => void;
+  extensions?: Array<string>;
 };
 
 export type TypeModule = {

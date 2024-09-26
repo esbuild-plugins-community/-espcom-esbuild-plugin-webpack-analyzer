@@ -1,17 +1,26 @@
-import * as path from 'node:path';
-
 import { start } from 'webpack-bundle-analyzer';
 import { Plugin } from 'esbuild';
 
-import { TypeOptions, TypeStats, TypeStartResponse } from './types.js';
+import { TypeOptions, TypeStartResponse } from './types.js';
 import { pluginName } from './constants.js';
-import { getModules } from './getModules.js';
+import { getStats } from './getStats.js';
 import { validateResult } from './validators/validateResult.js';
 import { validateOptions } from './validators/validateOptions.js';
 import { validateSetup } from './validators/validateSetup.js';
 
 export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
   validateOptions(options);
+
+  const finalOptions: TypeOptions = {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    port: options?.port ?? 8888,
+    host: options?.host ?? '127.0.0.1',
+    open: options?.open || false,
+    extensions: options?.extensions || ['.js', '.cjs', '.mjs', '.ts', '.tsx'],
+    getStartResponse: options?.getStartResponse,
+  };
+
+  const extensionsSet = new Set(finalOptions.extensions);
 
   return {
     name: pluginName,
@@ -23,13 +32,7 @@ export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
       build.onEnd((resultRaw) => {
         const result = validateResult(resultRaw);
 
-        const stats: TypeStats = {
-          assets: Object.keys(result.metafile.outputs).map((chunkName) => ({
-            name: chunkName,
-            chunks: [path.parse(chunkName).name.split('.').shift()!],
-          })),
-          modules: getModules(result.metafile),
-        };
+        const stats = getStats(result.metafile, extensionsSet);
 
         if (response?.updateChartData) {
           response.updateChartData(stats);
@@ -40,14 +43,14 @@ export const pluginWebpackAnalyzer = (options?: TypeOptions): Plugin => {
         // https://github.com/webpack-contrib/webpack-bundle-analyzer
         return start(stats, {
           analyzerUrl: (params) => `http://${params.listenHost}:${params.boundAddress.port}`,
-          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-          port: options?.port ?? 8888,
-          host: options?.host ?? '127.0.0.1',
-          openBrowser: options?.open || false,
+          port: finalOptions.port!,
+          host: finalOptions.host!,
+          openBrowser: finalOptions.open!,
+          reportTitle: 'Analyzer',
         }).then((res) => {
           response = res;
 
-          options?.getStartResponse?.(res);
+          finalOptions?.getStartResponse?.(res);
         });
       });
 

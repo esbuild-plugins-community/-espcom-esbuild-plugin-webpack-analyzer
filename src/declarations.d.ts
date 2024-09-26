@@ -8,6 +8,8 @@ declare module 'webpack-bundle-analyzer' {
       port: number;
       host: string;
       openBrowser: boolean;
+      reportTitle: string;
+      entrypoints?: Array<string>;
     }
   ) => Promise<TypeStartResponse>;
 }

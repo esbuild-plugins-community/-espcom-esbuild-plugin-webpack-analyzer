@@ -56,6 +56,10 @@ with the following properties:
 - `open` (boolean, optional): Automatically open the analyzer in the browser. Defaults to `false`.
 - `getStartResponse` (function, optional): Callback function that receives the response object 
 of the analyzer server.
+- `extensions` (Array<string>, optional): Which extensions should be included. By default 
+`['.js', '.cjs', '.mjs', '.ts', '.tsx']`. It's not possible to analyze `.css` because 
+`webpack-bundle-analyzer` filters output files by `/\.(js|mjs|cjs)$/iu`. But you may include smth.
+like `.json` if it is imported in some file.
 
 ### Example
 
